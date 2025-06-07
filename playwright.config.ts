@@ -14,20 +14,24 @@ export default defineConfig({
   reporter: [['list'], ['html']],
 
   use: {
-    baseURL: `${ENV.BASE_ROME_URL || 'http://localhost:3000'}`,
+    baseURL: `${ENV.BASE_URL || 'http://localhost:3000'}`,
     headless: true,
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',
     trace: 'off',
     launchOptions: {
       slowMo: 1000,
-      args: ['--start-maximized'],
+      args: ENV.PROXY_HOST && ENV.PROXY_HOST !== 'http://dummy-proxy-url.com:8080' 
+        ? ['--start-maximized'] 
+        : [],
     },
     viewport: {
       width: 1600,
       height: 1000,
     },
-    proxy: ENV.PROXY_HOST ? { server: ENV.PROXY_HOST } : undefined,
+    proxy: ENV.PROXY_HOST && ENV.PROXY_HOST !== 'http://dummy-proxy-url.com:8080' 
+      ? { server: ENV.PROXY_HOST } 
+      : undefined,
     video: {
       mode: 'off',
       size: { width: 1600, height: 1000 },
